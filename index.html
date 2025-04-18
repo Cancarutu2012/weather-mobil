@@ -192,6 +192,7 @@
       if (weather === "Clouds") return "Felhős";
       if (weather === "Wind") return "Szél";
       if (weather === "Tornado") return "Tornado";
+      if (weather === "Thunderstorm") return "Vihar";
       return "Időjárás";
     }
 
@@ -203,6 +204,7 @@
       if (weather === "Clouds") backgroundImage = "https://imgs.search.brave.com/67v1GVhHi3nKAXkutu9nGJIFzIUJYVSELtsngzmoScc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvY2xv/dWR5LXNreS1hdC1k/dXNrLXd0YXJoZ3Zr/ZW05eWR3bTQuanBn";
       if (weather === "Wind") backgroundImage = "https://imgs.search.brave.com/Hev3j8Zqg-oG2uXafNXqGLg5t_PjgafDMWr1bcDc4cs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvcGVh/Y2VmdWwtcmVsYXhp/bmctb2hpMzRiMWgx/Y3RqejY4dy5qcGc";
       if (weather === "Tornado") backgroundImage = "https://imgs.search.brave.com/ZnlMa54S5-CgIogdbD-08koNbfKfN4n4GlsUEfknXeA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJhY2Nlc3Mu/Y29tL2Z1bGwvMzYx/NjQ4OS5qcGc";
+      if (weather === "Thunderstorm") backgroundImage = "https://imgs.search.brave.com/07sfAoOj0gRR1FePr5tHBNGxTQGOonidhhg79HsjMQ4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJiYXQuY29t/L2ltZy81NjU2NTIt/dGh1bmRlci1tb2Jp/bGUtd2FsbHBhcGVy/LmpwZw";
 
       document.getElementById('weather-body').style.backgroundImage = `url('${backgroundImage}')`;
       document.getElementById('weather-body').style.backgroundSize = 'cover';
@@ -218,6 +220,7 @@
       if (weather === "Clouds") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/cloudy.svg";
       if (weather === "Wind") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/wind.svg";
       if (weather === "Tornado") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/tornado.svg";
+      if (weather === "Thunderstorm") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/thunderstorm.svg";
       document.getElementById('weather-icon').src = iconUrl;
     }
 
