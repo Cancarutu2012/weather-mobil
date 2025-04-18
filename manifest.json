@@ -1,11 +1,11 @@
 {
-  "name": "Időjárás",
+  "name": "Dinamikus Időjárás",
   "short_name": "Időjárás",
-  "description": "Tudd meg az aktuális időjárást bárhol a világon!",
-  "start_url": "/index.html", 
-  "display": "standalone", 
-  "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
+  "description": "A webes alkalmazás, amely megjeleníti a városok időjárását és frissíti a háttérképet és az ikonokat a megfelelő időjárásnak megfelelően.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#1E1E1E",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
@@ -17,5 +17,8 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "scope": "/",
+  "orientation": "portrait",
+  "lang": "hu"
 }
