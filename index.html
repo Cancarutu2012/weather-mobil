@@ -127,6 +127,10 @@
       width: 100px; /* Növeltük az ikonok méretét */
       margin: 20px 0;
       display: inline-block;
+      background-color: #d3d3d3; /* világosszürke háttér */
+      padding: 15px; /* Padding a háttér körül */
+      border-radius: 50%; /* Lekerekített sarkok */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Finom árnyék */
     }
   </style>
 </head>
@@ -192,11 +196,10 @@
       if (weather === "Wind") backgroundImage = "https://imgs.search.brave.com/Hev3j8Zqg-oG2uXafNXqGLg5t_PjgafDMWr1bcDc4cs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvcGVh/Y2VmdWwtcmVsYXhp/bmctb2hpMzRiMWgx/Y3RqejY4dy5qcGc";
       if (weather === "Tornado") backgroundImage = "https://imgs.search.brave.com/ZnlMa54S5-CgIogdbD-08koNbfKfN4n4GlsUEfknXeA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJhY2Nlc3Mu/Y29tL2Z1bGwvMzYx/NjQ4OS5qcGc";
 
-      // Beállítjuk, hogy a háttérkép mobilbarát legyen
       document.getElementById('weather-body').style.backgroundImage = `url('${backgroundImage}')`;
-      document.getElementById('weather-body').style.backgroundSize = 'cover'; // A háttér lefedi az egész képernyőt
-      document.getElementById('weather-body').style.backgroundPosition = 'center'; // Középre igazítjuk
-      document.getElementById('weather-body').style.backgroundAttachment = 'fixed'; // A háttér nem görgetődik
+      document.getElementById('weather-body').style.backgroundSize = 'cover';
+      document.getElementById('weather-body').style.backgroundPosition = 'center';
+      document.getElementById('weather-body').style.backgroundAttachment = 'fixed';
     }
 
     function setWeatherIcon(weather) {
