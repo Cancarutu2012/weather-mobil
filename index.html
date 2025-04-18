@@ -52,32 +52,32 @@
     }
 
     .menu {
-      font-family: 'CustomFont', sans-serif;
-      color: white;
       font-size: 1.2em;
       cursor: pointer;
       background-color: rgba(0, 0, 0, 0.6);
       padding: 10px;
       border-radius: 5px;
+      color: white; /* Fehér szín a gombokhoz */
+      font-family: 'CustomFont', sans-serif; /* Ugyanaz a betűtípus */
     }
 
     #locations-list {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 250px;
-      background-color: rgba(0, 0, 0, 0.8);
-      overflow-y: auto;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease-in-out; /* Csúszás animáció */
-      padding: 20px;
-      z-index: 6;
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px;
+  background-color: rgba(0, 0, 0, 0.8);
+  overflow-y: auto;
+  transform: translateX(-100%); /* Alapértelmezett állapot: rejtett */
+  transition: transform 0.3s ease-in-out; /* Csúszás animáció */
+  padding: 20px;
+  z-index: 6;
+}
 
     #locations-list.show {
-      transform: translateX(0); /* Ha látható, a menü a bal oldalról csúszik be */
-    }
+  transform: translateX(0); /* Ha látható, a menü a bal oldalról csúszik be */
+}
 
     #locations-list input {
       width: 100%;
@@ -88,13 +88,13 @@
     }
 
     #locations-list button {
-      font-family: 'CustomFont', sans-serif;
-      color: white;
       padding: 10px;
       width: 100%;
       background-color: #4CAF50;
+      color: white;
       border: none;
       cursor: pointer;
+      font-family: 'CustomFont', sans-serif; /* Ugyanaz a betűtípus */
     }
 
     #locations-list button:hover {
@@ -114,6 +114,7 @@
       margin-bottom: 10px;
       color: white;
       cursor: pointer;
+      font-family: 'CustomFont', sans-serif; /* Ugyanaz a betűtípus */
     }
 
     .city-list li:hover {
@@ -149,7 +150,7 @@
       width: 300px;
       background-color: rgba(0, 0, 0, 0.9);
       overflow-y: auto;
-      transform: translateX(-150%);
+      transform: translateX(-150%); /* Elrejtett állapot */
       transition: transform 0.5s ease;
       padding: 20px;
       z-index: 10;
@@ -179,14 +180,14 @@
     }
 
     button {
-      font-family: 'CustomFont', sans-serif;
-      color: white;
       font-size: 1.2em;
       padding: 10px;
       cursor: pointer;
       background-color: rgba(0, 0, 0, 0.6);
       border: none;
+      color: white;
       border-radius: 5px;
+      font-family: 'CustomFont', sans-serif; /* Ugyanaz a betűtípus */
     }
 
     button:hover {
@@ -237,12 +238,12 @@
 
   <!-- Város lista -->
   <div id="locations-list">
-    <h2>Városok</h2>
-    <input type="text" id="city-input" placeholder="Add város" />
-    <button onclick="addCity()">Hozzáadás</button>
-    <ul class="city-list" id="city-list"></ul>
-    <button onclick="toggleMenu()" style="margin-top: 20px;">Elrejtés</button>
-  </div>
+  <h2>Városok</h2>
+  <input type="text" id="city-input" placeholder="Add város" />
+  <button onclick="addCity()">Hozzáadás</button>
+  <ul class="city-list" id="city-list"></ul>
+  <button onclick="toggleMenu()" style="margin-top: 20px;">Elrejtés</button>
+</div>
 
   <script>
     const apiKey = "96a09d87336d6cf927235e50c9eae98e";
@@ -285,10 +286,7 @@
       if (weather === "Rain") backgroundImage = "https://imgs.search.brave.com/mCek_6il7Bd2fayodJ8ZG8GK_57LRMQfJy6Fj65RBeI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzc4Lzc5/LzU2Lzc4Nzk1NjQ0/OTFkMzFlM2U2MzY5/YjI3YTIwNWZjNGIw/LmpwZw";
       if (weather === "Snow") backgroundImage = "https://imgs.search.brave.com/NnblCgk4vVLzEkyuMDcd-uTwFHeGf7jKyXzZCPoecRA/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDY5ODEy/MzkuanBn";
       if (weather === "Clouds") backgroundImage = "https://images.unsplash.com/photo-1499346030926-9a72daac6c63";
-      if (weather === "Wind") backgroundImage = "https://imgs.search.brave.com/Hev3j8Zqg-oG2uXafNXqGLg5t_PjgafDMWr1bcDc4cs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvcGVh/Y2VmdWwtcmVsYXhp/bmctb2hpMzRiMWgx/Y3RqejY4dy5qcGc";
-      if (weather === "Tornado") backgroundImage = "https://imgs.search.brave.com/ZnlMa54S5-CgIogdbD-08koNbfKfN4n4GlsUEfknXeA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGVyYWNjZXNzLmNv/bS9mdWxsLzM2MTY0/ODkuanBn";
-      if (weather === "Thunderstorm") backgroundImage = "https://imgs.search.brave.com/07sfAoOj0gRR1FePr5tHBNGxTQGOonidhhg79HsjMQ4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJiYXQuY29t/L2ltZy81NjU2NTIt/dGh1bmRlci1tb2Jp/bGUtd2FsbHBhcGVy/LmpwZw";
-
+      if (weather === "Wind") backgroundImage = "https://imgs.search.brave.com/Hev3j8Zqg-oG2uXafNXqGLg5t_PjgafDMWr1bcDc4cs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDY3MTkx/MjkuanBn";
       
       document.getElementById('weather-body').style.backgroundImage = `url('${backgroundImage}')`;
       document.getElementById('weather-body').style.backgroundSize = 'cover';
