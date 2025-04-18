@@ -1,19 +1,19 @@
 {
-  "name": "Dinamikus Időjárás",
-  "short_name": "Időjárás",
-  "description": "A webes alkalmazás, amely megjeleníti a városok időjárását és frissíti a háttérképet és az ikonokat a megfelelő időjárásnak megfelelően.",
+  "name": "MWeather",
+  "short_name": "MWeather",
+  "description": "MWeather",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#1E1E1E",
   "icons": [
     {
-      "src": "icon/A.png",
+      "src": "icons/A.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon/B.png",
+      "src": "icons/B.png",
       "sizes": "512x512",
       "type": "image/png"
     }
