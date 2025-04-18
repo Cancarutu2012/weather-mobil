@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dinamikus Időjárás</title>
 
-  <!-- Link to the manifest.json -->
   <link rel="manifest" href="manifest.json">
 
   <style>
-    /* Betűtípus hozzáadása */
     @font-face {
       font-family: 'CustomFont';
       src: url('fonts/A.ttf') format('truetype');
@@ -20,7 +18,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: 'CustomFont', sans-serif; /* Using custom font here */
+      font-family: 'CustomFont', sans-serif;
       color: white;
       text-align: center;
       background-size: cover;
@@ -68,21 +66,22 @@
     #locations-list {
       position: fixed;
       top: 0;
-      left: -250px;
+      left: 0;
       height: 100%;
       width: 250px;
       background-color: rgba(0, 0, 0, 0.8);
       overflow-y: auto;
-      transition: left 0.3s ease-in-out;
       padding: 20px;
       z-index: 3;
       margin: 0;
-      visibility: hidden;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      display: none;
     }
 
     #locations-list.show {
-      left: 0;
-      visibility: visible;
+      transform: translateX(0);
+      display: block;
     }
 
     #locations-list input {
@@ -136,16 +135,17 @@
     }
 
     .weather-icon {
-      width: 100px; /* Növeltük az ikonok méretét */
+      width: 100px;
       margin: 20px 0;
       display: inline-block;
-      background-color: #d3d3d3; /* világosszürke háttér */
-      padding: 15px; /* Padding a háttér körül */
-      border-radius: 50%; /* Lekerekített sarkok */
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Finom árnyék */
+      background-color: #d3d3d3;
+      padding: 15px;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
+
 <body id="weather-body" style="background-image: url('https://source.unsplash.com/1600x900/?clear-sky');">
   <div class="overlay"></div>
 
@@ -166,9 +166,9 @@
   </div>
 
   <script>
-    const apiKey = "96a09d87336d6cf927235e50c9eae98e"; // OpenWeather API kulcs
+    const apiKey = "96a09d87336d6cf927235e50c9eae98e";
     let currentCity = 'Budapest';
-    let cities = [];  // Városok listája
+    let cities = [];
 
     function fetchWeatherData(city) {
       fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`)
@@ -195,7 +195,7 @@
       if (weather === "Snow") return "Hó";
       if (weather === "Clouds") return "Felhős";
       if (weather === "Wind") return "Szél";
-      if (weather === "Tornado") return "Tornado";
+      if (weather === "Tornado") return "Tornádó";
       if (weather === "Thunderstorm") return "Vihar";
       return "Időjárás";
     }
@@ -204,10 +204,10 @@
       let backgroundImage = '';
       if (weather === "Clear") backgroundImage = "https://wallpaperbat.com/img/307824-sunny-day-wallpaper.jpg";
       if (weather === "Rain") backgroundImage = "https://imgs.search.brave.com/mCek_6il7Bd2fayodJ8ZG8GK_57LRMQfJy6Fj65RBeI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzc4Lzc5/LzU2Lzc4Nzk1NjQ0/OTFkMzFlM2U2MzY5/YjI3YTIwNWZjNGIw/LmpwZw";
-      if (weather === "Snow") backgroundImage = "https://imgs.search.brave.com/NnblCgk4vVLzEkyuMDcd-uTwFHeGf7jKyXzZCPoecRA/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDY5ODEy/MzkuanBn";
+      if (weather === "Snow") backgroundImage = "https://imgs.search.brave.com/NnblCgk4vVLzEkyuMDcd-uTwFHeGf7jKyXzZCPoecRA/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGVyY2F2ZS5jb20v/d3Avd3A2OTgxMjM5/LmpwZw";
       if (weather === "Clouds") backgroundImage = "https://imgs.search.brave.com/67v1GVhHi3nKAXkutu9nGJIFzIUJYVSELtsngzmoScc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvY2xv/dWR5LXNreS1hdC1k/dXNrLXd0YXJoZ3Zr/ZW05eWR3bTQuanBn";
       if (weather === "Wind") backgroundImage = "https://imgs.search.brave.com/Hev3j8Zqg-oG2uXafNXqGLg5t_PjgafDMWr1bcDc4cs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvcGVh/Y2VmdWwtcmVsYXhp/bmctb2hpMzRiMWgx/Y3RqejY4dy5qcGc";
-      if (weather === "Tornado") backgroundImage = "https://imgs.search.brave.com/ZnlMa54S5-CgIogdbD-08koNbfKfN4n4GlsUEfknXeA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJhY2Nlc3Mu/Y29tL2Z1bGwvMzYx/NjQ4OS5qcGc";
+      if (weather === "Tornado") backgroundImage = "https://imgs.search.brave.com/ZnlMa54S5-CgIogdbD-08koNbfKfN4n4GlsUEfknXeA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGVyYWNjZXNzLmNv/bS9mdWxsLzM2MTY0/ODkuanBn";
       if (weather === "Thunderstorm") backgroundImage = "https://imgs.search.brave.com/07sfAoOj0gRR1FePr5tHBNGxTQGOonidhhg79HsjMQ4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJiYXQuY29t/L2ltZy81NjU2NTIt/dGh1bmRlci1tb2Jp/bGUtd2FsbHBhcGVy/LmpwZw";
 
       document.getElementById('weather-body').style.backgroundImage = `url('${backgroundImage}')`;
@@ -225,12 +225,16 @@
       if (weather === "Wind") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/wind.svg";
       if (weather === "Tornado") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/tornado.svg";
       if (weather === "Thunderstorm") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/thunderstorm.svg";
+
       document.getElementById('weather-icon').src = iconUrl;
     }
 
     function toggleMenu() {
       const menu = document.getElementById('locations-list');
       menu.classList.toggle('show');
+      if (menu.classList.contains('show')) {
+        document.getElementById('city-input').focus();
+      }
     }
 
     function addCity() {
