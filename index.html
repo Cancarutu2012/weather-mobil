@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Időjárás App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Samsung Sans', sans-serif;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      background-color: #ffffff;
+    }
+    .container {
+      padding: 20px;
+      width: 90%;
+      max-width: 400px;
+      background: linear-gradient(to bottom, #76c7c0, #89d4d0);
+      border-radius: 15px;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    .city-input {
+      padding: 10px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      width: 80%;
+    }
+    .ok-button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      margin-left: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .ok-button:hover {
+      background-color: #45a049;
+    }
+    .city-name {
+      font-size: 1.8em;
+      margin-top: 20px;
+      word-wrap: break-word;
+    }
+    .temperature {
+      font-size: 3.5em;
+      margin: 10px 0;
+    }
+    .description {
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+    #weatherIcon {
+      width: 80px;
+      height: 80px;
+      margin-top: 20px;
+    }
+
+    /* Mobil verzióra optimalizált */
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+        width: 90%;
+      }
+      .city-name {
+        font-size: 1.5em;
+      }
+      .temperature {
+        font-size: 3em;
+      }
+      .description {
+        font-size: 1.1em;
+      }
+      #weatherIcon {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="input-group">
+      <input type="text" id="searchCity" placeholder="Írd be a város nevét..." class="city-input">
+      <button class="ok-button" id="searchButton">OK</button>
+    </div>
+
+    <div class="city-name" id="cityName">Budapest</div>
+    <div class="temperature" id="temperature">0°C</div>
+    <div class="description" id="description">N/A</div>
+    <img id="weatherIcon" src="https://basmilius.github.io/weather-icons/production/fill/all/clear-day.svg" alt="weather icon">
+  </div>
+
+  <script>
+    const apiKey = "96a09d87336d6cf927235e50c9eae98e";
+    const searchCity = document.getElementById("searchCity");
+    const searchButton = document.getElementById("searchButton");
+    const cityName = document.getElementById("cityName");
+    const temperature = document.getElementById("temperature");
+    const description = document.getElementById("description");
+    const weatherIcon = document.getElementById("weatherIcon");
+
+    searchButton.addEventListener("click", () => {
+      const city = searchCity.value.trim();
+      if (city) {
+        getWeather(city);
+      }
+    });
+
+    async function getWeather(city) {
+      try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric&lang=hu`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          cityName.textContent = data.name;
+          temperature.textContent = `${Math.round(data.main.temp)}°C`;
+          description.textContent = data.weather[0].description;
+
+          const condition = data.weather[0].description.toLowerCase();
+          
+          if (condition.includes("eső")) {
+            weatherIcon.src = "https://basmilius.github.io/weather-icons/production/fill/all/rain.svg";
+          } else if (condition.includes("zivatar")) {
+            weatherIcon.src = "https://basmilius.github.io/weather-icons/production/fill/all/thunderstorms.svg";
+          } else if (condition.includes("hó")) {
+            weatherIcon.src = "https://basmilius.github.io/weather-icons/production/fill/all/snow.svg";
+          } else if (condition.includes("köd")) {
+            weatherIcon.src = "https://basmilius.github.io/weather-icons/production/fill/all/mist.svg";
+          } else if (condition.includes("felhő")) {
+            weatherIcon.src = "https://basmilius.github.io/weather-icons/production/fill/all/cloudy.svg";
+          } else if (condition.includes("napos")) {
+            weatherIcon.src = "https://basmilius.github.io/weather-icons/production/fill/all/clear-day.svg";
+          } else if (condition.includes("derült")) {
+            weatherIcon.src = "https://basmilius.github.io/weather-icons/production/fill/all/clear-night.svg";
+          } else {
+            weatherIcon.src = "https://basmilius.github.io/weather-icons/production/fill/all/overcast-day.svg";
+          }
+        } else {
+          alert("Nem található ilyen város!");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Hiba történt az időjárás lekérésekor.");
+      }
+    }
+
+    getWeather("Budapest"); // Alapból betöltse Budapestet
+  </script>
+</body>
+</html>
