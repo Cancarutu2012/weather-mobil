@@ -315,16 +315,20 @@ updateCityNameSize();
     }
 
     function updateWeather(data) {
-      const cityName = data.name;
-      const temperature = Math.round(data.main.temp);
-      const weatherCondition = data.weather[0].main;
+  const cityName = data.name;
+  document.getElementById('city-name').textContent = cityName;
 
-      document.getElementById('city-name').textContent = cityName;
-      document.getElementById('temperature').textContent = `${temperature}°C`;
-      document.getElementById('weather-status').textContent = getWeatherStatus(weatherCondition);
-      setWeatherBackground(weatherCondition);
-      setWeatherIcon(weatherCondition);
-    }
+  // Frissítjük a város név betűméretét és elválasztó jelet
+  updateCityNameSize();
+
+  const temperature = Math.round(data.main.temp);
+  const weatherCondition = data.weather[0].main;
+
+  document.getElementById('temperature').textContent = `${temperature}°C`;
+  document.getElementById('weather-status').textContent = getWeatherStatus(weatherCondition);
+  setWeatherBackground(weatherCondition);
+  setWeatherIcon(weatherCondition);
+}
 
     function getWeatherStatus(weather) {
       if (weather === "Clear") return "Napsütés";
