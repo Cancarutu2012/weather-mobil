@@ -104,7 +104,7 @@
     }
     
     #temperature {
-      font-size: 6em; /* Itt módosíthatod a kívánt méretet */
+      font-size: 6em;
       margin: 0.2em 0;
     }    
 
@@ -178,7 +178,6 @@
 
   <div class="buttons-container">
     <div class="menu" onclick="toggleMenu('locations-list')">Helyek</div>
-    
     <div class="menu" onclick="toggleMenu('theme-container')">Téma</div>
   </div>
 
@@ -216,6 +215,10 @@
     <div class="theme-option" onclick="setTheme('gif')">
       <img src="https://cdn-icons-gif.flaticon.com/17102/17102813.gif" alt="GIF">
       II. téma
+    </div>
+    <div class="theme-option" onclick="setTheme('gradient')">
+      <img src="https://cdn-icons-png.flaticon.com/512/25/25402.png" alt="Gradient">
+      III. téma
     </div>
     <button onclick="toggleMenu('theme-container')">Elrejtés</button>
   </div>
@@ -264,12 +267,19 @@
 
     function setWeatherBackground(weather) {
       let backgroundImage = '';
-      if (weather === "Clear") backgroundImage = "https://wallpaperbat.com/img/307824-sunny-day-wallpaper.jpg";
-      if (weather === "Rain") backgroundImage = "https://imgs.search.brave.com/mCek_6il7Bd2fayodJ8ZG8GK_57LRMQfJy6Fj65RBeI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzc4Lzc5/LzU2Lzc4Nzk1NjQ0/OTFkMzFlM2U2MzY5/YjI3YTIwNWZjNGIw/LmpwZw";
-      if (weather === "Snow") backgroundImage = "https://imgs.search.brave.com/NnblCgk4vVLzEkyuMDcd-uTwFHeGf7jKyXzZCPoecRA/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDY5ODEy/MzkuanBn";
-      if (weather === "Clouds") backgroundImage = "https://images.unsplash.com/photo-1499346030926-9a72daac6c63";
-      document.getElementById('weather-body').style.backgroundImage = `url('${backgroundImage}')`;
-      if (weather === "Wind") backgroundImage = "https://imgs.search.brave.com/Hev3j8Zqg-oG2uXafNXqGLg5t_PjgafDMWr1bcDc4cs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGVyY2F2ZS5jb20v/wp67.jpg";
+      if (currentTheme === 'gradient') {
+        if (weather === "Clear") backgroundImage = "linear-gradient(to right, #00b0ff, #87cefa)";
+        if (weather === "Rain") backgroundImage = "linear-gradient(to right, #1e3c72, #2a5298)";
+        if (weather === "Snow") backgroundImage = "linear-gradient(to right, #ffffff, #e6f7ff)";
+        if (weather === "Clouds") backgroundImage = "linear-gradient(to right, #808080, #d3d3d3)";
+        if (weather === "Thunderstorm") backgroundImage = "linear-gradient(to right, #ff7f00, #ffcc00)";
+      } else {
+        // Alapértelmezett háttérképek
+        if (weather === "Clear") backgroundImage = "https://wallpaperbat.com/img/307824-sunny-day-wallpaper.jpg";
+        if (weather === "Rain") backgroundImage = "https://imgs.search.brave.com/mCek_6il7Bd2fayodJ8ZG8GK_57LRMQfJy6Fj65RBeI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzc4Lzc5/LzU2Lzc4Nzk1NjQ0/OTFkMzFlM2U2MzY5/YjI3YTIwNWZjNGIw/LmpwZw";
+        if (weather === "Snow") backgroundImage = "https://imgs.search.brave.com/NnblCgk4vVLzEkyuMDcd-uTwFHeGf7jKyXzZCPoecRA/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDY5ODEy/MzkuanBn";
+      }
+      document.getElementById('weather-body').style.backgroundImage = backgroundImage;
     }
 
     function setWeatherIcon(weather) {
@@ -289,6 +299,14 @@
           Clouds: "https://cdn-icons-gif.flaticon.com/6455/6455024.gif",
           Wind: "https://cdn-icons-gif.flaticon.com/8793/8793355.gif",
           Thunderstorm: "https://cdn-icons-gif.flaticon.com/6455/6455012.gif",
+        },
+        gradient: {
+          Clear: "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/clear-day.svg",
+          Rain: "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/rain.svg",
+          Snow: "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/snow.svg",
+          Clouds: "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/cloudy.svg",
+          Wind: "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/wind.svg",
+          Thunderstorm: "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/thunderstorm.svg",
         }
       };
       const iconUrl = icons[currentTheme][weather] || icons[currentTheme]['Clear'];
@@ -327,40 +345,6 @@
       });
     }
 
-    function fetchWeatherData(city) {
-  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`)
-    .then(response => response.json())
-    .then(data => {
-      updateWeather(data);
-      fetchForecastData(data.coord.lat, data.coord.lon); // Get forecast using coordinates
-    })
-    .catch(err => console.error('Error fetching weather data:', err));
-}
-
-    function fetchForecastData(lat, lon) {
-  fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${apiKey}&units=metric&lang=hu`)
-    .then(response => response.json())
-    .then(data => updateForecast(data))
-    .catch(err => console.error('Error fetching forecast data:', err));
-}
-
-function updateForecast(data) {
-  const forecastTable = document.getElementById('forecast-table').getElementsByTagName('tbody')[0];
-  forecastTable.innerHTML = '';  // Clear existing forecast
-
-  data.daily.forEach((day) => {
-    const date = new Date(day.dt * 1000); // Convert Unix time to Date object
-    const dayName = date.toLocaleDateString('hu-HU', { weekday: 'long' });
-    const temperature = Math.round(day.temp.day); // Day temperature
-    const weatherCondition = day.weather[0].main; // Weather condition for the day
-
-    const row = forecastTable.insertRow();
-    row.innerHTML = `<td>${dayName}</td><td>${temperature}°C</td><td>${getWeatherStatus(weatherCondition)}</td>`;
-  });
-}
-
-
-    // Inicializálás
     fetchWeatherData(currentCity);
   </script>
 
