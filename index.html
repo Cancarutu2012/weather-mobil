@@ -102,11 +102,11 @@
       padding: 10px;
       text-align: center;
     }
-	
+    
     #temperature {
-  	font-size: 6em; /* Itt módosíthatod a kívánt méretet */
-  	margin: 0.2em 0;
-	}	
+      font-size: 6em; /* Itt módosíthatod a kívánt méretet */
+      margin: 0.2em 0;
+    }    
 
     .buttons-container {
       position: absolute;
@@ -165,13 +165,13 @@
     }
   </style>
 </head>
-<body id="weather-body" style="background-image: url('https://source.unsplash.com/1600x900/?clear-sky');">
+<body id="weather-body" style="background-image: url('https://wallpaperbat.com/img/307824-sunny-day-wallpaper.jpg');">
 
   <div class="overlay"></div>
 
   <div class="content">
     <h1 id="city-name">Budapest</h1>
-    <p id="temperature">18°C</p>
+    <p id="temperature">19°C</p>
     <p id="weather-status">Napsütés</p>
     <img id="weather-icon" class="weather-icon" src="" alt="Weather Icon">
   </div>
@@ -201,8 +201,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td>Hétfő</td><td>20°C</td><td>Napsütés</td></tr>
-        <tr><td>Kedd</td><td>18°C</td><td>Felhős</td></tr>
+        <!-- Dinamikusan töltődik -->
       </tbody>
     </table>
     <button onclick="toggleMenu('forecast-container')">Elrejtés</button>
@@ -223,7 +222,7 @@
 
   <script>
     const apiKey = "96a09d87336d6cf927235e50c9eae98e";
-    let currentCity = 'Budapest';
+    let currentCity = 'Székesfehérvár';
     let currentTheme = 'default';
     let cities = [];
 
@@ -234,7 +233,10 @@
     function fetchWeatherData(city) {
       fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`)
         .then(response => response.json())
-        .then(data => updateWeather(data))
+        .then(data => {
+          updateWeather(data);
+          fetchForecastData(data.coord.lat, data.coord.lon);  // Lekéri az előrejelzést a koordináták alapján
+        })
         .catch(err => console.error(err));
     }
 
@@ -325,7 +327,31 @@
       });
     }
 
+    function fetchForecastData(lat, lon) {
+      fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${apiKey}&units=metric&lang=hu`)
+        .then(response => response.json())
+        .then(data => updateForecast(data))
+        .catch(err => console.error(err));
+    }
+
+    function updateForecast(data) {
+      const forecastTable = document.getElementById('forecast-table').getElementsByTagName('tbody')[0];
+      forecastTable.innerHTML = '';  // Clear existing forecast
+
+      data.daily.forEach((day) => {
+        const date = new Date(day.dt * 1000); // Convert Unix time to date
+        const dayName = date.toLocaleDateString('hu-HU', { weekday: 'long' });
+        const temperature = Math.round(day.temp.day);
+        const weatherCondition = day.weather[0].main;
+
+        const row = forecastTable.insertRow();
+        row.innerHTML = `<td>${dayName}</td><td>${temperature}°C</td><td>${getWeatherStatus(weatherCondition)}</td>`;
+      });
+    }
+
+    // Inicializálás
     fetchWeatherData(currentCity);
   </script>
+
 </body>
 </html>
