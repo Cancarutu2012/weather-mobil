@@ -57,44 +57,42 @@
       background-color: rgba(0, 0, 0, 0.6);
       padding: 10px;
       border-radius: 5px;
-      color: white; /* Fehér szín a gombokhoz */
-      font-family: 'CustomFont', sans-serif; /* Ugyanaz a betűtípus */
+      color: white;
+      font-family: 'CustomFont', sans-serif;
     }
 
     #locations-list {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 250px;
-  background-color: rgba(0, 0, 0, 0.8);
-  overflow-y: auto;
-  transform: translateX(-100%); /* Alapértelmezett állapot: rejtett */
-  transition: transform 0.3s ease-in-out; /* Csúszás animáció */
-  padding: 20px;
-  z-index: 6;
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      background-color: rgba(0, 0, 0, 0.8);
+      overflow-y: auto;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      padding: 20px;
+      z-index: 6;
+    }
 
     #locations-list.show {
-  transform: translateX(0); /* Ha látható, a menü a bal oldalról csúszik be */
-}
+      transform: translateX(0);
+    }
 
-    #locations-list input {
+    #locations-list input,
+    #locations-list button {
       width: 100%;
-      padding: 10px;
       margin: 10px 0;
+      padding: 10px;
       border-radius: 5px;
-      border: 1px solid #ccc;
+      border: none;
+      font-family: 'CustomFont', sans-serif;
     }
 
     #locations-list button {
-      padding: 10px;
-      width: 100%;
       background-color: #4CAF50;
       color: white;
-      border: none;
       cursor: pointer;
-      font-family: 'CustomFont', sans-serif; /* Ugyanaz a betűtípus */
     }
 
     #locations-list button:hover {
@@ -114,7 +112,7 @@
       margin-bottom: 10px;
       color: white;
       cursor: pointer;
-      font-family: 'CustomFont', sans-serif; /* Ugyanaz a betűtípus */
+      font-family: 'CustomFont', sans-serif;
     }
 
     .city-list li:hover {
@@ -141,7 +139,6 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    /* Forecast panel */
     #forecast-container {
       position: fixed;
       top: 0;
@@ -150,7 +147,7 @@
       width: 300px;
       background-color: rgba(0, 0, 0, 0.9);
       overflow-y: auto;
-      transform: translateX(-150%); /* Elrejtett állapot */
+      transform: translateX(-150%);
       transition: transform 0.5s ease;
       padding: 20px;
       z-index: 10;
@@ -168,7 +165,6 @@
       text-align: center;
     }
 
-    /* Gombok konténer */
     .buttons-container {
       position: absolute;
       top: 20px;
@@ -187,7 +183,7 @@
       border: none;
       color: white;
       border-radius: 5px;
-      font-family: 'CustomFont', sans-serif; /* Ugyanaz a betűtípus */
+      font-family: 'CustomFont', sans-serif;
     }
 
     button:hover {
@@ -206,159 +202,176 @@
     <img id="weather-icon" class="weather-icon" src="" alt="Weather Icon">
   </div>
 
-  <!-- Gombok -->
   <div class="buttons-container">
     <div class="menu" onclick="toggleMenu()">Helyek</div>
     <button onclick="toggleForecast()">Előrejelzés</button>
   </div>
 
-  <!-- Előrejelzés panel -->
   <div id="forecast-container">
-    <h2>7 napos előrejelzés</h2>
+    <h2>5 napos előrejelzés</h2>
     <table id="forecast-table">
       <thead>
-        <tr>
-          <th>Nap</th>
-          <th>Hőmérséklet</th>
-          <th>Állapot</th>
-        </tr>
+        <tr><th>Nap</th><th>Hőmérséklet</th><th>Állapot</th></tr>
       </thead>
-      <tbody>
-        <tr><td>Hétfő</td><td>20°C</td><td>Napsütés</td></tr>
-        <tr><td>Kedd</td><td>18°C</td><td>Felhős</td></tr>
-        <tr><td>Szerda</td><td>17°C</td><td>Eső</td></tr>
-        <tr><td>Csütörtök</td><td>16°C</td><td>Eső</td></tr>
-        <tr><td>Péntek</td><td>19°C</td><td>Napsütés</td></tr>
-        <tr><td>Szombat</td><td>21°C</td><td>Napsütés</td></tr>
-        <tr><td>Vasárnap</td><td>22°C</td><td>Felhős</td></tr>
-      </tbody>
+      <tbody></tbody>
     </table>
     <button onclick="toggleForecast()" style="margin-top: 20px;">Elrejtés</button>
   </div>
 
-  <!-- Város lista -->
   <div id="locations-list">
-  <h2>Városok</h2>
-  <input type="text" id="city-input" placeholder="Add város" />
-  <button onclick="addCity()">Hozzáadás</button>
-  <ul class="city-list" id="city-list"></ul>
-  <button onclick="toggleMenu()" style="margin-top: 20px;">Elrejtés</button>
-</div>
+    <h2>Városok</h2>
+    <input type="text" id="city-input" placeholder="Add város" />
+    <button onclick="addCity()">Hozzáadás</button>
+    <ul class="city-list" id="city-list"></ul>
+    <button onclick="toggleMenu()" style="margin-top: 20px;">Elrejtés</button>
+  </div>
 
-  <script>
-    const apiKey = "96a09d87336d6cf927235e50c9eae98e";
-    let currentCity = 'Budapest';
-    let cities = [];
+<script>
+const apiKey = "96a09d87336d6cf927235e50c9eae98e";
+let currentCity = 'Budapest';
+let cities = [];
 
-    function fetchWeatherData(city) {
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`)
-        .then(response => response.json())
-        .then(data => updateWeather(data))
-        .catch(err => console.error(err));
+function fetchWeatherData(city) {
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`)
+    .then(response => response.json())
+    .then(data => {
+      updateWeather(data);
+      fetchForecastData(city);
+    })
+    .catch(err => console.error(err));
+}
+
+function fetchForecastData(city) {
+  fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=hu`)
+    .then(response => response.json())
+    .then(data => updateForecast(data))
+    .catch(err => console.error(err));
+}
+
+function updateWeather(data) {
+  const cityName = data.name;
+  const temperature = Math.round(data.main.temp);
+  const weatherCondition = data.weather[0].main;
+
+  document.getElementById('city-name').textContent = cityName;
+  document.getElementById('temperature').textContent = `${temperature}°C`;
+  document.getElementById('weather-status').textContent = getWeatherStatus(weatherCondition);
+  setWeatherBackground(weatherCondition);
+  setWeatherIcon(weatherCondition);
+}
+
+function updateForecast(data) {
+  const forecastTable = document.getElementById('forecast-table').getElementsByTagName('tbody')[0];
+  forecastTable.innerHTML = '';
+
+  const days = {};
+
+  data.list.forEach(entry => {
+    const date = new Date(entry.dt_txt);
+    const dayName = date.toLocaleDateString('hu-HU', { weekday: 'long' });
+    if (!days[dayName] && date.getHours() === 12) {
+      days[dayName] = {
+        temp: Math.round(entry.main.temp),
+        weather: getWeatherStatus(entry.weather[0].main)
+      };
     }
+  });
 
-    function updateWeather(data) {
-      const cityName = data.name;
-      const temperature = Math.round(data.main.temp);
-      const weatherCondition = data.weather[0].main;
+  Object.keys(days).slice(0, 7).forEach(day => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${capitalizeFirstLetter(day)}</td><td>${days[day].temp}°C</td><td>${days[day].weather}</td>`;
+    forecastTable.appendChild(tr);
+  });
+}
 
-      document.getElementById('city-name').textContent = cityName;
-      document.getElementById('temperature').textContent = `${temperature}°C`;
-      document.getElementById('weather-status').textContent = getWeatherStatus(weatherCondition);
-      setWeatherBackground(weatherCondition);
-      setWeatherIcon(weatherCondition);
-    }
+function getWeatherStatus(weather) {
+  if (weather === "Clear") return "Napsütés";
+  if (weather === "Rain") return "Eső";
+  if (weather === "Snow") return "Hó";
+  if (weather === "Clouds") return "Felhős";
+  if (weather === "Wind") return "Szél";
+  if (weather === "Tornado") return "Tornádó";
+  if (weather === "Thunderstorm") return "Vihar";
+  return "Időjárás";
+}
 
-    function getWeatherStatus(weather) {
-      if (weather === "Clear") return "Napsütés";
-      if (weather === "Rain") return "Eső";
-      if (weather === "Snow") return "Hó";
-      if (weather === "Clouds") return "Felhős";
-      if (weather === "Wind") return "Szél";
-      if (weather === "Tornado") return "Tornádó";
-      if (weather === "Thunderstorm") return "Vihar";
-      return "Időjárás";
-    }
+function setWeatherBackground(weather) {
+  let backgroundImage = '';
+  if (weather === "Clear") backgroundImage = "https://wallpaperbat.com/img/307824-sunny-day-wallpaper.jpg";
+  if (weather === "Rain") backgroundImage = "https://imgs.search.brave.com/mCek_6il7Bd2fayodJ8ZG8GK_57LRMQfJy6Fj65RBeI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzc4Lzc5/LzU2Lzc4Nzk1NjQ0/OTFkMzFlM2U2MzY5/YjI3YTIwNWZjNGIw/LmpwZw";
+  if (weather === "Snow") backgroundImage = "https://imgs.search.brave.com/NnblCgk4vVLzEkyuMDcd-uTwFHeGf7jKyXzZCPoecRA/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGVyY2F2ZS5jb20v/wp69w.jpg";
+  if (weather === "Clouds") backgroundImage = "https://images.unsplash.com/photo-1499346030926-9a72daac6c63";
+  if (weather === "Wind") backgroundImage = "https://imgs.search.brave.com/Hev3j8Zqg-oG2uXafNXqGLg5t_PjgafDMWr1bcDc4cs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGVyY2F2ZS5jb20v/wp67.jpg";
 
-    function setWeatherBackground(weather) {
-      let backgroundImage = '';
-      if (weather === "Clear") backgroundImage = "https://wallpaperbat.com/img/307824-sunny-day-wallpaper.jpg";
-      if (weather === "Rain") backgroundImage = "https://imgs.search.brave.com/mCek_6il7Bd2fayodJ8ZG8GK_57LRMQfJy6Fj65RBeI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzc4Lzc5/LzU2Lzc4Nzk1NjQ0/OTFkMzFlM2U2MzY5/YjI3YTIwNWZjNGIw/LmpwZw";
-      if (weather === "Snow") backgroundImage = "https://imgs.search.brave.com/NnblCgk4vVLzEkyuMDcd-uTwFHeGf7jKyXzZCPoecRA/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDY5ODEy/MzkuanBn";
-      if (weather === "Clouds") backgroundImage = "https://images.unsplash.com/photo-1499346030926-9a72daac6c63";
-      if (weather === "Wind") backgroundImage = "https://imgs.search.brave.com/Hev3j8Zqg-oG2uXafNXqGLg5t_PjgafDMWr1bcDc4cs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDY3MTkx/MjkuanBn";
-      
-      document.getElementById('weather-body').style.backgroundImage = `url('${backgroundImage}')`;
-      document.getElementById('weather-body').style.backgroundSize = 'cover';
-      document.getElementById('weather-body').style.backgroundPosition = 'center';
-      document.getElementById('weather-body').style.backgroundAttachment = 'fixed';
-    }
+  document.getElementById('weather-body').style.backgroundImage = `url('${backgroundImage}')`;
+}
 
-    function setWeatherIcon(weather) {
-      let iconUrl = '';
-      if (weather === "Clear") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/clear-day.svg";
-      if (weather === "Rain") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/rain.svg";
-      if (weather === "Snow") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/snow.svg";
-      if (weather === "Clouds") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/cloudy.svg";
-      if (weather === "Wind") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/wind.svg";
-      if (weather === "Tornado") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/tornado.svg";
-      if (weather === "Thunderstorm") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/thunderstorm.svg";
+function setWeatherIcon(weather) {
+  let iconUrl = '';
+  if (weather === "Clear") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/clear-day.svg";
+  if (weather === "Rain") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/rain.svg";
+  if (weather === "Snow") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/snow.svg";
+  if (weather === "Clouds") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/cloudy.svg";
+  if (weather === "Wind") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/wind.svg";
+  if (weather === "Tornado") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/tornado.svg";
+  if (weather === "Thunderstorm") iconUrl = "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/thunderstorm.svg";
 
-      document.getElementById('weather-icon').src = iconUrl;
-    }
+  document.getElementById('weather-icon').src = iconUrl;
+}
 
-    function toggleMenu() {
-      const menu = document.getElementById('locations-list');
-      menu.classList.toggle('show');
-    }
+function toggleMenu() {
+  const menu = document.getElementById('locations-list');
+  menu.classList.toggle('show');
+}
 
-    function addCity() {
-      const cityInput = document.getElementById('city-input').value;
-      if (cityInput) {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${apiKey}`)
-          .then(response => response.json())
-          .then(data => {
-            if (data.cod === 200) {
-              if (!cities.includes(cityInput)) {
-                cities.push(cityInput);
-                renderCityList();
-                fetchWeatherData(cityInput);
-                document.getElementById('city-input').value = '';
-                toggleMenu();
-              }
-            } else {
-              alert("Nem érvényes város!");
-            }
-          })
-          .catch(err => console.error(err));
-      }
-    }
+function addCity() {
+  const cityInput = document.getElementById('city-input').value;
+  if (cityInput) {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${apiKey}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.cod === 200) {
+          if (!cities.includes(cityInput)) {
+            cities.push(cityInput);
+            renderCityList();
+            fetchWeatherData(cityInput);
+            document.getElementById('city-input').value = '';
+            toggleMenu();
+          }
+        } else {
+          alert("Nem érvényes város!");
+        }
+      })
+      .catch(err => console.error(err));
+  }
+}
 
-    function renderCityList() {
-      const cityList = document.getElementById('city-list');
-      cityList.innerHTML = '';
-      cities.forEach(city => {
-        const li = document.createElement('li');
-        li.textContent = city;
-        li.onclick = () => {
-          currentCity = city;
-          fetchWeatherData(city);
-          toggleMenu();
-        };
-        cityList.appendChild(li);
-      });
-    }
+function renderCityList() {
+  const cityList = document.getElementById('city-list');
+  cityList.innerHTML = '';
+  cities.forEach(city => {
+    const li = document.createElement('li');
+    li.textContent = city;
+    li.onclick = () => {
+      currentCity = city;
+      fetchWeatherData(city);
+      toggleMenu();
+    };
+    cityList.appendChild(li);
+  });
+}
 
-    function toggleForecast() {
-      const forecast = document.getElementById('forecast-container');
-      if (forecast.style.transform === 'translateX(0%)') {
-        forecast.style.transform = 'translateX(-100%)';
-      } else {
-        forecast.style.transform = 'translateX(0%)';
-      }
-    }
+function toggleForecast() {
+  const forecast = document.getElementById('forecast-container');
+  forecast.style.transform = (forecast.style.transform === 'translateX(0%)') ? 'translateX(-100%)' : 'translateX(0%)';
+}
 
-    fetchWeatherData(currentCity);
-  </script>
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+fetchWeatherData(currentCity);
+</script>
+
 </body>
 </html>
