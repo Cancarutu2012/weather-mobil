@@ -36,24 +36,7 @@
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
     }
-.weather-icon img,
-.theme-option img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 50%;
-  background-color: white;
-  padding: 5px;
-}
-.weather-icon {
-  width: 80px;
-  height: 80px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 50%;
-  background-color: white;
-  padding: 10px;
-}
+
     .content {
       position: relative;
       z-index: 1;
@@ -78,14 +61,23 @@
       margin: 0 auto;
     }
 
-   
+    .weather-icon {
+  width: 80px;
+  height: 80px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  background-color: white;
+  padding: 10px;
+}
+
     .temp {
-      font-size: 2.8em;
+      font-size: 2.5em;
       margin: 10px 0;
     }
 
     .description {
-      font-size: 1.4em;
+      font-size: 1.2em;
       color: #555;
     }
 
@@ -143,6 +135,26 @@
       color: white;
       border-collapse: collapse;
     }
+#city-list {
+  list-style-type: none;  /* Eltünteti a lista jelet */
+  padding: 0;  /* Törli a belső margót */
+  margin: 0;   /* Törli a külső margót */
+}
+#city-list li {
+  font-size: 1.2em;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.6);  /* Hasonló háttér, mint a gomboknál */
+  padding: 10px;
+  border-radius: 5px;  /* Lekerekített sarkok */
+  margin: 10px 0;  /* Térköz a listaelemek között */
+  font-family: 'CustomFont', sans-serif;
+  color: white;
+  transition: background-color 0.3s;  /* Áttűnés a háttér színében */
+}
+
+#city-list li:hover {
+  background-color: rgba(0, 0, 0, 0.8);  /* Kicsit sötétebb árnyalat hover esetén */
+}
 
     #forecast-table th, #forecast-table td {
       border-bottom: 1px solid white;
@@ -232,6 +244,32 @@
     let currentTheme = 'default';
     let cities = [];
 
+   function addCity() {
+  const cityInput = document.getElementById('city-input');
+  const cityName = cityInput.value.trim(); // Tisztítjuk a bemenetet
+  
+  if (cityName && !cities.includes(cityName)) {
+    cities.push(cityName);  // Hozzáadjuk a várost a listához
+    updateCityList();  // Frissítjük a városok listáját
+    fetchWeatherData(cityName);  // Lekérjük az új város időjárási adatait
+    cityInput.value = '';  // Ürítjük a bemeneti mezőt
+  }
+}
+
+function updateCityList() {
+  const cityList = document.getElementById('city-list');
+  cityList.innerHTML = '';  // Először töröljük a listát
+
+  cities.forEach(city => {
+    const listItem = document.createElement('li');
+    listItem.textContent = city;
+    listItem.onclick = function() {
+      currentCity = city;  // A kiválasztott városra állítjuk a currentCity-t
+      fetchWeatherData(currentCity);  // Lekérjük az időjárást
+    };
+    cityList.appendChild(listItem);  // Hozzáadjuk a várost a listához
+  });
+}
     function toggleMenu(menuId) {
       document.getElementById(menuId).classList.toggle('show');
     }
