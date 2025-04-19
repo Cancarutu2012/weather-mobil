@@ -155,6 +155,14 @@
 #city-list li:hover {
   background-color: rgba(0, 0, 0, 0.8);  /* Kicsit sötétebb árnyalat hover esetén */
 }
+#city-name {
+  font-size: 6vw;  /* A betűméret a képernyő szélességéhez igazodik */
+  white-space: nowrap;  /* Megakadályozza, hogy a szöveg több sorba törjön */
+  overflow: hidden;  /* Ha nem fér el, eltünteti a túlcsorduló részt */
+  text-overflow: ellipsis;  /* Három ponttal jelzi, hogy nem fér el az egész szöveg */
+  max-width: 90%;  /* A szöveg maximálisan 90%-a legyen a képernyő szélességének */
+  margin: 0.5em 0;
+}
 
     #forecast-table th, #forecast-table td {
       border-bottom: 1px solid white;
