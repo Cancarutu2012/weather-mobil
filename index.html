@@ -162,6 +162,11 @@
       padding: 10px;
       text-align: center;
     }
+#city-name {
+  font-size: 3em;  /* Alapértelmezett nagyobb méret */
+  transition: font-size 0.3s ease;  /* Zökkenőmentes animáció a méretváltozáshoz */
+  margin: 0.5em 0;
+}
 
     .theme-option {
       margin-bottom: 20px;
@@ -260,6 +265,19 @@
 function updateCityList() {
   const cityList = document.getElementById('city-list');
   cityList.innerHTML = '';  // Először töröljük a listát
+function updateCityNameSize() {
+  const cityNameElement = document.getElementById('city-name');
+  const cityNameText = cityNameElement.textContent.trim();
+  
+  if (cityNameText.length > 13) {
+    cityNameElement.style.fontSize = '1.5em';  // Ha hosszabb, mint 13 karakter, csökkentjük a betűméretet
+  } else {
+    cityNameElement.style.fontSize = '3em';  // Ha 13 karakter vagy kevesebb, alapértelmezett méret
+  }
+}
+
+// Ezt a függvényt meghívhatjuk, amikor a város neve frissül
+updateCityNameSize();
 
   cities.forEach(city => {
     const listItem = document.createElement('li');
