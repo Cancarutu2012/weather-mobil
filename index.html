@@ -36,7 +36,24 @@
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
     }
-
+.weather-icon img,
+.theme-option img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: white;
+  padding: 5px;
+}
+.weather-icon {
+  width: 80px;
+  height: 80px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  background-color: white;
+  padding: 10px;
+}
     .content {
       position: relative;
       z-index: 1;
@@ -50,6 +67,36 @@
     p {
       font-size: 1.5em;
       margin: 0.2em 0;
+    }
+
+    .weather-container {
+      background: rgba(192, 192, 192, 0.9); /* Szürke háttér */
+      border-radius: 15px; /* Lekerekített sarkok */
+      display: inline-block;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      margin: 0 auto;
+    }
+
+   
+    .temp {
+      font-size: 2.8em;
+      margin: 10px 0;
+    }
+
+    .description {
+      font-size: 1.4em;
+      color: #555;
+    }
+
+    .buttons-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5cm;
     }
 
     .menu {
@@ -102,67 +149,25 @@
       padding: 10px;
       text-align: center;
     }
-    
-    #temperature {
-      font-size: 6em; /* Itt módosíthatod a kívánt méretet */
-      margin: 0.2em 0;
-    }    
-
-    .buttons-container {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 5;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5cm;
-    }
-
-    .weather-icon {
-      width: 100px;
-      margin: 20px 0;
-      background-color: #d3d3d3;
-      padding: 15px;
-      border-radius: 50%;
-    }
 
     .theme-option {
+      margin-bottom: 20px;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      background: #333;
+      gap: 10px;
       padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      cursor: pointer;
+      border-radius: 5px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 1.2em;
     }
 
     .theme-option img {
       width: 50px;
-      margin-right: 15px;
+      height: 50px;
     }
 
-    .theme-option:hover {
-      background: #555;
-    }
-
-    .city-list {
-      list-style-type: none;
-      padding: 0;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-
-    .city-list li {
-      padding: 10px;
-      background: #333;
-      margin-bottom: 10px;
-      color: white;
-      cursor: pointer;
-    }
-
-    .city-list li:hover {
-      background: #444;
-    }
   </style>
 </head>
 <body id="weather-body" style="background-image: url('https://wallpaperbat.com/img/307824-sunny-day-wallpaper.jpg');">
@@ -170,15 +175,16 @@
   <div class="overlay"></div>
 
   <div class="content">
-    <h1 id="city-name">Budapest</h1>
-    <p id="temperature">19°C</p>
-    <p id="weather-status">Napsütés</p>
-    <img id="weather-icon" class="weather-icon" src="" alt="Weather Icon">
+    <div class="weather-container">
+      <h1 id="city-name">Budapest</h1>
+      <p id="temperature" class="temp">19°C</p>
+      <p id="weather-status" class="description">Napsütés</p>
+      <img id="weather-icon" class="weather-icon" src="https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/clear-day.svg" alt="Weather Icon">
+    </div>
   </div>
 
   <div class="buttons-container">
     <div class="menu" onclick="toggleMenu('locations-list')">Helyek</div>
-    
     <div class="menu" onclick="toggleMenu('theme-container')">Téma</div>
   </div>
 
@@ -235,7 +241,7 @@
         .then(response => response.json())
         .then(data => {
           updateWeather(data);
-          fetchForecastData(data.coord.lat, data.coord.lon);  // Lekéri az előrejelzést a koordináták alapján
+          fetchForecastData(data.coord.lat, data.coord.lon);  
         })
         .catch(err => console.error(err));
     }
@@ -288,42 +294,17 @@
           Snow: "https://cdn-icons-gif.flaticon.com/17484/17484890.gif",
           Clouds: "https://cdn-icons-gif.flaticon.com/6455/6455024.gif",
           Wind: "https://cdn-icons-gif.flaticon.com/8793/8793355.gif",
-          Thunderstorm: "https://cdn-icons-gif.flaticon.com/6455/6455012.gif",
-        }
+          Thunderstorm: "https://cdn-icons-gif.flaticon.com/4297/4297355.gif",
+        },
       };
-
-      const iconUrl = icons[currentTheme][weather] || icons['default'][weather];
-      document.getElementById('weather-icon').src = iconUrl;
+      document.getElementById('weather-icon').src = icons[currentTheme][weather] || icons[currentTheme]["Clear"];
     }
 
     function setTheme(theme) {
       currentTheme = theme;
-      fetchWeatherData(currentCity);
+      fetchWeatherData(currentCity); // Refresh the weather with new theme
       toggleMenu('theme-container');
     }
-
-    function addCity() {
-      const cityInput = document.getElementById('city-input').value;
-      if (cityInput) {
-        cities.push(cityInput);
-        renderCityList();
-        fetchWeatherData(cityInput);
-        toggleMenu('locations-list');
-      }
-    }
-
-    function renderCityList() {
-      const cityListElement = document.getElementById('city-list');
-      cityListElement.innerHTML = '';
-      cities.forEach(city => {
-        const li = document.createElement('li');
-        li.textContent = city;
-        li.onclick = () => fetchWeatherData(city);
-        cityListElement.appendChild(li);
-      });
-    }
-
-    fetchWeatherData(currentCity);
   </script>
 </body>
 </html>
