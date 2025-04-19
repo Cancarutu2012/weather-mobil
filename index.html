@@ -304,6 +304,47 @@ function updateCityList() {
       setWeatherBackground(weatherCondition);
       setWeatherIcon(weatherCondition);
     }
+<script>
+// Service Worker regisztrálása
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(function(registration) {
+        console.log('Service Worker regisztrálva:', registration);
+      })
+      .catch(function(error) {
+        console.log('Service Worker regisztrálása sikertelen:', error);
+      });
+  }
+  // A push értesítések engedélyezésének kérése
+  function askNotificationPermission() {
+    if ('Notification' in window && navigator.serviceWorker) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          console.log('Értesítések engedélyezve!');
+        } else {
+          console.log('Értesítések nem engedélyezve');
+        }
+      });
+    }
+  }
+
+  // Hívjuk meg az engedélykérő függvényt, amikor a webalkalmazás betöltődik
+  askNotificationPermission();
+
+  // Értesítés küldése
+  function sendNotification() {
+    if (Notification.permission === 'granted') {
+      const notification = new Notification("How's the weather today?", {
+        body: "Ne felejtsd el megnézni az időjárást!",
+        icon: "icons/A.png",  // Az ikonod URL-je
+      });
+    }
+  }
+
+  // Indítunk egy időzítőt, ami 1 percenként küld értesítést
+  setInterval(() => {
+    sendNotification();
+  }, 60000);  // 60000 ms = 1 perc
 
     function getWeatherStatus(weather) {
       if (weather === "Clear") return "Napsütés";
