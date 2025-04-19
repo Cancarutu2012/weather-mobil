@@ -256,26 +256,6 @@
    function addCity() {
   const cityInput = document.getElementById('city-input');
   const cityName = cityInput.value.trim(); // Tisztítjuk a bemenetet
-function updateCityNameSize() {
-  const cityNameElement = document.getElementById('city-name');
-  let cityNameText = cityNameElement.textContent.trim();
-
-  if (cityNameText.length > 13) {
-    // Ha hosszabb, mint 13 karakter, akkor a 13. karakter után sortörés
-    const firstPart = cityNameText.substring(0, 13); // Az első 13 karakter
-    const secondPart = cityNameText.substring(13);  // A többi rész
-
-    // Frissítjük a szöveget: az első rész, egy elválasztó jel, és az új sor
-    cityNameElement.innerHTML = `${firstPart}<br>${secondPart}`;
-    cityNameElement.style.fontSize = '2.5em';  // Kisebb méret, ha hosszú
-  } else {
-    cityNameElement.textContent = cityNameText;  // Ha nem hosszú, akkor csak simán kiírjuk
-    cityNameElement.style.fontSize = '3em';  // Visszaállítjuk az alap méretet
-  }
-}
-
-// Ezt a függvényt meghívhatjuk, amikor a város neve frissül
-updateCityNameSize();
   
   if (cityName && !cities.includes(cityName)) {
     cities.push(cityName);  // Hozzáadjuk a várost a listához
@@ -314,20 +294,16 @@ function updateCityList() {
     }
 
     function updateWeather(data) {
-  const cityName = data.name;
-  document.getElementById('city-name').textContent = cityName;
+      const cityName = data.name;
+      const temperature = Math.round(data.main.temp);
+      const weatherCondition = data.weather[0].main;
 
-  // Frissítjük a város név betűméretét és sortörését
-  updateCityNameSize();
-
-  const temperature = Math.round(data.main.temp);
-  const weatherCondition = data.weather[0].main;
-
-  document.getElementById('temperature').textContent = `${temperature}°C`;
-  document.getElementById('weather-status').textContent = getWeatherStatus(weatherCondition);
-  setWeatherBackground(weatherCondition);
-  setWeatherIcon(weatherCondition);
-}
+      document.getElementById('city-name').textContent = cityName;
+      document.getElementById('temperature').textContent = `${temperature}°C`;
+      document.getElementById('weather-status').textContent = getWeatherStatus(weatherCondition);
+      setWeatherBackground(weatherCondition);
+      setWeatherIcon(weatherCondition);
+    }
 
     function getWeatherStatus(weather) {
       if (weather === "Clear") return "Napsütés";
