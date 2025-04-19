@@ -327,27 +327,38 @@
       });
     }
 
+    function fetchWeatherData(city) {
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=hu`)
+    .then(response => response.json())
+    .then(data => {
+      updateWeather(data);
+      fetchForecastData(data.coord.lat, data.coord.lon); // Get forecast using coordinates
+    })
+    .catch(err => console.error('Error fetching weather data:', err));
+}
+
     function fetchForecastData(lat, lon) {
-      fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${apiKey}&units=metric&lang=hu`)
-        .then(response => response.json())
-        .then(data => updateForecast(data))
-        .catch(err => console.error(err));
-    }
+  fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${apiKey}&units=metric&lang=hu`)
+    .then(response => response.json())
+    .then(data => updateForecast(data))
+    .catch(err => console.error('Error fetching forecast data:', err));
+}
 
-    function updateForecast(data) {
-      const forecastTable = document.getElementById('forecast-table').getElementsByTagName('tbody')[0];
-      forecastTable.innerHTML = '';  // Clear existing forecast
+function updateForecast(data) {
+  const forecastTable = document.getElementById('forecast-table').getElementsByTagName('tbody')[0];
+  forecastTable.innerHTML = '';  // Clear existing forecast
 
-      data.daily.forEach((day) => {
-        const date = new Date(day.dt * 1000); // Convert Unix time to date
-        const dayName = date.toLocaleDateString('hu-HU', { weekday: 'long' });
-        const temperature = Math.round(day.temp.day);
-        const weatherCondition = day.weather[0].main;
+  data.daily.forEach((day) => {
+    const date = new Date(day.dt * 1000); // Convert Unix time to Date object
+    const dayName = date.toLocaleDateString('hu-HU', { weekday: 'long' });
+    const temperature = Math.round(day.temp.day); // Day temperature
+    const weatherCondition = day.weather[0].main; // Weather condition for the day
 
-        const row = forecastTable.insertRow();
-        row.innerHTML = `<td>${dayName}</td><td>${temperature}°C</td><td>${getWeatherStatus(weatherCondition)}</td>`;
-      });
-    }
+    const row = forecastTable.insertRow();
+    row.innerHTML = `<td>${dayName}</td><td>${temperature}°C</td><td>${getWeatherStatus(weatherCondition)}</td>`;
+  });
+}
+
 
     // Inicializálás
     fetchWeatherData(currentCity);
