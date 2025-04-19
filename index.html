@@ -166,6 +166,8 @@
   font-size: 3em;  /* Alapértelmezett nagyobb méret */
   transition: font-size 0.3s ease;  /* Zökkenőmentes animáció a méretváltozáshoz */
   margin: 0.5em 0;
+  white-space: pre-wrap;  /* Engedélyezi a sortörést */
+  word-wrap: break-word;  /* Ha szükséges, a szavak törése */
 }
 
     .theme-option {
@@ -267,14 +269,23 @@ function updateCityList() {
   cityList.innerHTML = '';  // Először töröljük a listát
 function updateCityNameSize() {
   const cityNameElement = document.getElementById('city-name');
-  const cityNameText = cityNameElement.textContent.trim();
-  
+  let cityNameText = cityNameElement.textContent.trim();
+
   if (cityNameText.length > 13) {
-    cityNameElement.style.fontSize = '1.5em';  // Ha hosszabb, mint 13 karakter, csökkentjük a betűméretet
+    // Ha hosszabb, mint 13 karakter, akkor hozzáadunk egy elválasztó jelet és új sorba tesszük a szöveg egy részét
+    const firstPart = cityNameText.substring(0, 13); // Az első 13 karakter
+    const secondPart = cityNameText.substring(13);  // A többi rész
+
+    cityNameElement.innerHTML = `${firstPart} |<br>${secondPart}`;  // Elválasztó jel és sorváltás
+    cityNameElement.style.fontSize = '2.5em';  // Kisebb méret, ha hosszú
   } else {
-    cityNameElement.style.fontSize = '3em';  // Ha 13 karakter vagy kevesebb, alapértelmezett méret
+    cityNameElement.textContent = cityNameText;  // Ha nem hosszú, akkor csak simán kiírjuk
+    cityNameElement.style.fontSize = '3em';  // Visszaállítjuk az alap méretet
   }
 }
+
+// Ezt a függvényt meghívhatjuk, amikor a város neve frissül
+updateCityNameSize();
 
 // Ezt a függvényt meghívhatjuk, amikor a város neve frissül
 updateCityNameSize();
